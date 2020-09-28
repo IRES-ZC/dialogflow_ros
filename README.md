@@ -36,7 +36,10 @@ export GOOGLE_APPLICATION_CREDENTIALS='/path/to/key'
 ```bash
 gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
 ```
-
+or you can simply add this alias to ~/.bashrc
+```
+alias ga='export GOOGLE_APPLICATION_CREDENTIALS='/home/legendofsparta/catkin_ws/src/NOUR-KEY/key.json' && gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS && echo 'DONE!!''
+```
 ## Dialogflow Setup
 Follow the steps [here](https://dialogflow.com/docs/reference/v2-auth-setup) to setup authentication with Dialogflow. Note the name of your `project-id` and make sure to change that in `config/params.yaml`.
 
