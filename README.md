@@ -42,7 +42,7 @@ gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
 ```
 or you can simply add this alias to ~/.bashrc and `skip steps 4 and 5`.
 ```
-alias ga='export GOOGLE_APPLICATION_CREDENTIALS='/home/legendofsparta/catkin_ws/src/NOUR-KEY/key.json' && gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS && echo 'DONE!!''
+alias ga='export GOOGLE_APPLICATION_CREDENTIALS='$HOME/catkin_ws/src/NOUR-KEY/key.json' && gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS && echo 'DONE!!''
 ```
 Note: Don't forget to run `ga` at each terminal.
 
