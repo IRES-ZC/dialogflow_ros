@@ -26,6 +26,8 @@ class GspeechClient(object):
 
         # ROS Text Publisher
         text_topic = rospy.get_param('/text_topic', '/dialogflow_text')
+        #Use to send directly to dialogflow
+	#text_topic = rospy.get_param('/text_topic', '/dialogflow_client/requests/string_msg')
         self.text_pub = rospy.Publisher(text_topic, String, queue_size=10)
 
     def _get_data(self, in_data, frame_count, time_info, status):
@@ -94,7 +96,8 @@ class GspeechClient(object):
                 if transcript.lower() == 'exit':
                     self.shutdown()
                 # Send the rest of the sentence to topic
-                self.text_pub.publish(transcript)
+                if 'Google' in transcript:
+                    self.text_pub.publish(transcript)
 
     def gspeech_client(self):
         """Creates the Google Speech API client, configures it, and sends/gets

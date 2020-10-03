@@ -28,18 +28,24 @@ Follow the instructions [here](https://cloud.google.com/speech/docs/quickstart) 
 Usage of the Google Cloud SDK requires authentication. This means you require an API key and an activated service account to utilize the APIs.
  1. Setup a [service account](https://cloud.google.com/docs/authentication/getting-started)
  2. Download the service account key as a JSON.
- 3. Check you have GOOGLE_APPLICATION_CREDENTIALS in your environment. This should be the path to the keys.
+ 3. Install Google Cloud SDK:
+ ```
+ sudo snap install google-cloud-sdk --classic
+ ```
+ 4. Check you have GOOGLE_APPLICATION_CREDENTIALS in your environment. This should be the path to the keys.
 ```bash
 export GOOGLE_APPLICATION_CREDENTIALS='/path/to/key'
 ```
- 4. Run the authentication command:
+ 5. Run the authentication command:
 ```bash
 gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS
 ```
-or you can simply add this alias to ~/.bashrc
+or you can simply add this alias to ~/.bashrc and `skip steps 4 and 5`.
 ```
 alias ga='export GOOGLE_APPLICATION_CREDENTIALS='/home/legendofsparta/catkin_ws/src/NOUR-KEY/key.json' && gcloud auth activate-service-account --key-file $GOOGLE_APPLICATION_CREDENTIALS && echo 'DONE!!''
 ```
+Note: Don't forget to run `ga` at each terminal.
+
 ## Dialogflow Setup
 Follow the steps [here](https://dialogflow.com/docs/reference/v2-auth-setup) to setup authentication with Dialogflow. Note the name of your `project-id` and make sure to change that in `config/params.yaml`.
 

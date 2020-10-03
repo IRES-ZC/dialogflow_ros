@@ -1,3 +1,7 @@
+#!/usr/bin/env python
+import rospy
+#from std_srvs.srv import Trigger
+from nour_behave.srv import ServiceExample
 def print_context_parameters(contexts):
     result = []
     for context in contexts:
@@ -22,6 +26,12 @@ def print_parameters(parameters):
         temp_str += "{}".format("\n\t".join(param_list))
         return temp_str
 
+# Extract the plain parameter for the address
+def getAddress(parameters):
+    temp_str = ''
+    for parameter in parameters:
+        temp_str += "{}".format(parameters[parameter])
+        return temp_str
 
 def print_result(result):
     output = "DF_CLIENT: Results:\n" \
@@ -39,3 +49,22 @@ def print_result(result):
                      result.action,
                      print_parameters(result.parameters))
     return output
+
+#Check actions at each response
+def checkAction(result):
+    
+    if result.action == 'map.navi':
+        #rospy.init_node('service_server') 
+        #rospy.wait_for_service('/move_robot')
+        try:
+            srv= rospy.ServiceProxy('/nour_naviagte', ServiceExample)
+            serviceRes= srv(getAddress(result.parameters))
+            print("{} service called...".format(result.action))
+            print("Service Response:")
+            print(serviceRes)
+        except rospy.ServiceException as e:
+            print("Service call failed: %s"%e)
+    else:
+        print("No movement actions to take.")
+        
+    

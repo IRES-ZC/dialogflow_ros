@@ -291,6 +291,8 @@ class DialogflowClient(object):
             )
             df_msg = utils.converters.result_struct_to_msg(final_result)
             rospy.loginfo(utils.output.print_result(final_result))
+            # Check actions at each response
+            utils.output.checkAction(final_result)
             # Play audio
             if self.PLAY_AUDIO:
                 self._play_stream(final_audio.output_audio)

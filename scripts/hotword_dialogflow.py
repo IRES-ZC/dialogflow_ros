@@ -21,7 +21,7 @@ class HotwordDialogflow(object):
         rpack = RosPack()
         # UMDL or PMDL file paths along with audio files
         pkg_path = rpack.get_path('dialogflow_ros')
-        self.model_path = pkg_path + '/scripts/snowboy/resources/jarvis.umdl'
+        self.model_path = pkg_path + '/scripts/snowboy/resources/nour.pmdl'
         ding_path = pkg_path + '/scripts/snowboy/resources/ding.wav'
         # Setup df
         self.df_client = None
@@ -62,7 +62,7 @@ class HotwordDialogflow(object):
         signal.signal(signal.SIGINT, self._signal_handler)
         # Setup snowboy
         self.detector = snowboydecoder.HotwordDetector(self.model_path,
-                                                       sensitivity=[0.5, 0.5])
+                                                       sensitivity=0.5)
         self.df_client = DialogflowClient()
         rospy.loginfo("HOTWORD_CLIENT: Listening... Press Ctrl-C to stop.")
         while True:
