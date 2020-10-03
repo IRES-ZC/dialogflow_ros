@@ -64,6 +64,18 @@ def checkAction(result):
             print(serviceRes)
         except rospy.ServiceException as e:
             print("Service call failed: %s"%e)
+
+    elif result.action == 'MoveCommand':
+        #rospy.init_node('service_server') 
+        #rospy.wait_for_service('/move_robot')
+        try:
+            srv= rospy.ServiceProxy('/nour_naviagte', ServiceExample)
+            serviceRes= srv(getAddress(result.parameters))
+            print("{} service called...".format(result.action))
+            print("Service Response:")
+            print(serviceRes)
+        except rospy.ServiceException as e:
+            print("Service call failed: %s"%e)
     else:
         print("No movement actions to take.")
         
