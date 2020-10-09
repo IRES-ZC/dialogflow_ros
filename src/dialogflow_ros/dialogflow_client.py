@@ -2,10 +2,10 @@
 
 # Dialogflow
 import dialogflow_v2beta1
-from dialogflow_v2beta1.types import Context, EventInput, InputAudioConfig, \
+from dialogflow_v2beta1.types import Context, EventInput, InputAudioConfig, SynthesizeSpeechConfig, VoiceSelectionParams, \
     OutputAudioConfig, QueryInput, QueryParameters, \
     StreamingDetectIntentRequest, TextInput
-from dialogflow_v2beta1.gapic.enums import AudioEncoding, OutputAudioEncoding
+from dialogflow_v2beta1.gapic.enums import AudioEncoding, OutputAudioEncoding, SsmlVoiceGender
 import google.api_core.exceptions
 import utils
 from AudioServerStream import AudioServerStream
@@ -67,8 +67,17 @@ class DialogflowClient(object):
                                               sample_rate_hertz=self.RATE,
                                               phrase_hints=self.phrase_hints,
                                               model='command_and_search')
+
         self._output_audio_config = OutputAudioConfig(
-                audio_encoding=OutputAudioEncoding.OUTPUT_AUDIO_ENCODING_LINEAR_16
+                audio_encoding=OutputAudioEncoding.OUTPUT_AUDIO_ENCODING_LINEAR_16,
+                # Configuration of how speech should be synthesized https://cloud.google.com/dialogflow/es/docs/reference/rest/v2beta1/OutputAudioConfig
+                synthesize_speech_config=SynthesizeSpeechConfig(
+                    voice=VoiceSelectionParams(
+                        # Pick voices from the list https://cloud.google.com/text-to-speech/docs/voices
+                        name= 'en-US-Standard-G'
+                        #ssml_gender= SsmlVoiceGender.SSML_VOICE_GENDER_FEMALE
+                    )
+                )
         )
         # Create a session
         self._session_cli = dialogflow_v2beta1.SessionsClient()
