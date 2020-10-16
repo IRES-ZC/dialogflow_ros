@@ -1,7 +1,13 @@
 #!/usr/bin/env python
 import rospy
-#from std_srvs.srv import Trigger
 from nour_behave.srv import ServiceExample
+
+import os,sys,inspect
+current_dir= os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parent_dir= os.path.dirname(current_dir)
+sys.path.insert(0, parent_dir)
+import dialogflow_client
+
 def print_context_parameters(contexts):
     result = []
     for context in contexts:
@@ -54,8 +60,6 @@ def print_result(result):
 def checkAction(result):
     
     if result.action == 'map.navi':
-        #rospy.init_node('service_server') 
-        #rospy.wait_for_service('/move_robot')
         try:
             srv= rospy.ServiceProxy('/nour_naviagte', ServiceExample)
             serviceRes= srv(getAddress(result.parameters))
@@ -66,8 +70,6 @@ def checkAction(result):
             print("Service call failed: %s"%e)
 
     elif result.action == 'MoveCommand':
-        #rospy.init_node('service_server') 
-        #rospy.wait_for_service('/move_robot')
         try:
             srv= rospy.ServiceProxy('/nour_naviagte', ServiceExample)
             serviceRes= srv(getAddress(result.parameters))
@@ -76,6 +78,12 @@ def checkAction(result):
             print(serviceRes)
         except rospy.ServiceException as e:
             print("Service call failed: %s"%e)
+    elif result.action == 'ChangeVoice':
+        rospy.set_param('accent_voice',getAddress(result.parameters))
+        print("Changed Voice to "+ getAddress(result.parameters))
+        #rospy.sleep(5)
+        #df = dialogflow_client.DialogflowClient()
+        #df.reinti()
     else:
         print("No movement actions to take.")
         

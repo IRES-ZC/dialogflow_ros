@@ -10,14 +10,13 @@ import google.api_core.exceptions
 import utils
 from AudioServerStream import AudioServerStream
 from MicrophoneStream import MicrophoneStream
-
+from time import sleep
 # Python
 import pyaudio
 import signal
-
 import time
 from uuid import uuid4
-from yaml import load, YAMLError
+from yaml import load, YAMLError, FullLoader
 # ROS
 import rospy
 import rospkg
@@ -27,7 +26,7 @@ from dialogflow_ros.msg import *
 # Use to convert Struct messages to JSON
 # from google.protobuf.json_format import MessageToJson
 
-
+rospy.set_param('accent_voice','en-US-Standard-G')
 class DialogflowClient(object):
     def __init__(self, language_code='en-US', last_contexts=None):
         """Initialize all params and load data"""
@@ -49,7 +48,7 @@ class DialogflowClient(object):
         file_dir = rp.get_path('dialogflow_ros') + '/config/context.yaml'
         with open(file_dir, 'r') as f:
             try:
-                self.phrase_hints = load(f)
+                self.phrase_hints = load(f, Loader=FullLoader)
             except YAMLError:
                 rospy.logwarn("DF_CLIENT: Unable to open phrase hints yaml file!")
                 self.phrase_hints = []
@@ -74,7 +73,8 @@ class DialogflowClient(object):
                 synthesize_speech_config=SynthesizeSpeechConfig(
                     voice=VoiceSelectionParams(
                         # Pick voices from the list https://cloud.google.com/text-to-speech/docs/voices
-                        name= 'en-US-Standard-G'
+                        #name= 'en-US-Standard-G'
+                        name= rospy.get_param('accent_voice')
                         #ssml_gender= SsmlVoiceGender.SSML_VOICE_GENDER_FEMALE
                     )
                 )
@@ -349,6 +349,17 @@ class DialogflowClient(object):
         self.audio.terminate()
         exit()
 
+    def reinti(self):
+        """Close as cleanly as possible"""
+        rospy.loginfo("DF_CLIENT: Shutting down")
+        sleep(5)
+        self.audio.terminate()
+
+        sleep(5)
+        df = DialogflowClient()
+        df.start()
+        rospy.init_node('dialogflow_client')
+        
 
 if __name__ == '__main__':
     rospy.init_node('dialogflow_client')
