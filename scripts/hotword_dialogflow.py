@@ -81,16 +81,6 @@ class HotwordDialogflow(object):
         self.detector.terminate()
         exit()
 
-    def reinit(self):
-        self.interrupted = True
-        self._interrupt_callback()  # IDK man...
-        self.stream_out.close()
-        self.audio.terminate()
-        self.detector.terminate()
-        time.sleep(5)
-        hd = HotwordDialogflow()
-        hd.start()
-
 if __name__ == '__main__':
     rospy.init_node('hotword_client', log_level=rospy.DEBUG)
     hd = HotwordDialogflow()

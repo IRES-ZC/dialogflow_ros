@@ -22,11 +22,11 @@ import rospy
 import rospkg
 from std_msgs.msg import String
 from dialogflow_ros.msg import *
-
+import os
 # Use to convert Struct messages to JSON
 # from google.protobuf.json_format import MessageToJson
 
-rospy.set_param('accent_voice','en-US-Standard-G')
+#rospy.set_param('accent_voice','en-US-Standard-G')
 class DialogflowClient(object):
     def __init__(self, language_code='en-US', last_contexts=None):
         """Initialize all params and load data"""
@@ -348,21 +348,10 @@ class DialogflowClient(object):
         rospy.loginfo("DF_CLIENT: Shutting down")
         self.audio.terminate()
         exit()
-
-    def reinti(self):
-        """Close as cleanly as possible"""
-        rospy.loginfo("DF_CLIENT: Shutting down")
-        sleep(5)
-        self.audio.terminate()
-
-        sleep(5)
-        df = DialogflowClient()
-        df.start()
-        rospy.init_node('dialogflow_client')
         
-
 if __name__ == '__main__':
     rospy.init_node('dialogflow_client')
     df = DialogflowClient()
     df.start()
     # df.detect_intent_stream()
+#rosparam set /accent_voice "en-US-Standard-G"

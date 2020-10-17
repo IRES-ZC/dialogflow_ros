@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import rospy
 from nour_behave.srv import ServiceExample
-
+import signal
 import os,sys,inspect
 current_dir= os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parent_dir= os.path.dirname(current_dir)
@@ -81,9 +81,13 @@ def checkAction(result):
     elif result.action == 'ChangeVoice':
         rospy.set_param('accent_voice',getAddress(result.parameters))
         print("Changed Voice to "+ getAddress(result.parameters))
-        #rospy.sleep(5)
-        #df = dialogflow_client.DialogflowClient()
-        #df.reinti()
+        #rospy.sleep()
+        os.system('python -c "exit()" && gnome-terminal -- roslaunch dialogflow_ros hotword_df.launch && gnome-terminal -- rostopic pub -1 /dialogflow_client/requests/string_msg std_msgs/String "Changed-Voice-To English UK"')
+        # Remove the message then make it a custom intent that triggers in this line
+        print('Restarting System...')
+        df = dialogflow_client.DialogflowClient()
+        df.exit()
+
     else:
         print("No movement actions to take.")
         
