@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 import rospy
-from nour_behave.srv import ServiceExample
+from nour_behave.srv import ServiceExample,ServiceDetect
 import signal
 import os,sys,inspect
 current_dir= os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
@@ -58,7 +58,6 @@ def print_result(result):
 
 #Check actions at each response
 def checkAction(result):
-    
     if result.action == 'map.navi':
         try:
             srv= rospy.ServiceProxy('/nour_naviagte', ServiceExample)
@@ -78,6 +77,7 @@ def checkAction(result):
             print(serviceRes)
         except rospy.ServiceException as e:
             print("Service call failed: %s"%e)
+
     elif result.action == 'ChangeVoice':
         rospy.set_param('accent_voice',getAddress(result.parameters))
         print("Changed Voice to "+ getAddress(result.parameters))
@@ -87,6 +87,16 @@ def checkAction(result):
         print('Restarting System...')
         df = dialogflow_client.DialogflowClient()
         df.exit()
+
+    elif result.action == 'StartVisionDetect':
+        try:
+            srv= rospy.ServiceProxy('/nour_detect', ServiceDetect)
+            serviceRes= srv(result.action)
+            print("{} service called...".format(result.action))
+            print("Service Response:")
+            print(serviceRes)
+        except rospy.ServiceException as e:
+            print("Service call failed: %s"%e)
 
     else:
         print("No movement actions to take.")

@@ -73,8 +73,8 @@ class DialogflowClient(object):
                 synthesize_speech_config=SynthesizeSpeechConfig(
                     voice=VoiceSelectionParams(
                         # Pick voices from the list https://cloud.google.com/text-to-speech/docs/voices
-                        #name= 'en-US-Standard-G'
-                        name= rospy.get_param('accent_voice')
+                        name= 'en-US-Standard-G'
+                        #name= rospy.get_param('accent_voice')
                         #ssml_gender= SsmlVoiceGender.SSML_VOICE_GENDER_FEMALE
                     )
                 )
@@ -256,7 +256,11 @@ class DialogflowClient(object):
             )
             df_msg = utils.converters.result_struct_to_msg(
                     response.query_result)
+                    
             rospy.loginfo(utils.output.print_result(response.query_result))
+            # Check actions at each response
+            
+            utils.output.checkAction(response.query_result)
             # Play audio
             if self.PLAY_AUDIO:
                 self._play_stream(response.output_audio)
@@ -271,6 +275,7 @@ class DialogflowClient(object):
         requests = self._generator()
         responses = self._session_cli.streaming_detect_intent(requests)
         resp_list = []
+        
         try:
             for response in responses:
                 resp_list.append(response)
@@ -301,7 +306,9 @@ class DialogflowClient(object):
             df_msg = utils.converters.result_struct_to_msg(final_result)
             rospy.loginfo(utils.output.print_result(final_result))
             # Check actions at each response
+            
             utils.output.checkAction(final_result)
+            
             # Play audio
             if self.PLAY_AUDIO:
                 self._play_stream(final_audio.output_audio)
